@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 '''
 Fix formatting issues and float GQ values produced by svtool pipeline
 - Float GQ values are rounded to int

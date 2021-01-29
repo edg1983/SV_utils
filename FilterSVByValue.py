@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 '''
 Script to annotate SV VCF using any tab-separated file containing var ID and a float value
 Float value is annotated in INFO with the specified tag
