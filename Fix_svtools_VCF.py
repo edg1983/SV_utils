@@ -24,6 +24,17 @@ def parseFORMAT(format_string, sample_string):
     values = OrderedDict(zip(vcfFORMAT, vcfSAMPLE))
     return values
 
+def normalizeFORMAT(sample_values, format_string):
+    updated = 0
+    vcfFORMAT = set(format_string.split(":"))
+    missing_fmt = vcfFORMAT.difference(set(sample_values.keys()))
+    updated_values = sample_values
+    if len(missing_fmt) > 0:
+        updated = 1        
+        for f in missing_fmt:
+            updated_values[f] = 0
+    return updated, updated_values
+
 def updateDotFORMAT(sample_values, new_string):
     updated = 0
     keys = [x for x in sample_values.keys() if x != "GT"]
@@ -71,6 +82,7 @@ ngenos = 0
 gq_rounded = 0
 dot_changed = 0
 output_vars = 0
+format_normalized = 0
 while line:
     nvars += 1
     line = tokenize(line, "\t")
@@ -93,6 +105,9 @@ while line:
             is_updated, new_values = updateDotFORMAT(sample_values,"0")
             dot_changed += is_updated
 
+            is_updated, new_values = normalizeFORMAT(sample_values,format_string)
+            format_normalized += is_updated
+
             line[i] = ":".join([str(x) for x in new_values.values()])            
         outfile.write("\t".join(line) + "\n")
     line = vcf.readline()
@@ -104,3 +119,4 @@ print(output_vars, " variants with proper format")
 print(ngenos, " total genotypes in output vars")
 print(gq_rounded, " GQ values rounded")
 print(dot_changed, " dot values converted to zero")
+print(format_normalized, " sample format normalized")
