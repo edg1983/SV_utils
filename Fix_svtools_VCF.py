@@ -2,9 +2,11 @@
 
 '''
 Fix formatting issues and float GQ values produced by svtool pipeline
-- Float GQ values are rounded to int
-- Dot values in sample fields are converted to zero
 - Poor variants lacking proper FORMAT fields are removed
+- Float GQ values are rounded to int (float GQs break a lot of downstream tools)
+- Dot values in sample fields are converted to zero (again most tools expect int/float in FORMAT)
+- When a variant has a proper format, ensure all samples have all values set
+	otherwise normalize them by setting missing fields to zero
 
 Author: Edoardo Giacopuzzi
 '''
